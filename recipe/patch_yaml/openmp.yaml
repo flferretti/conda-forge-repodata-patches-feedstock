@@ -6,3 +6,20 @@ if:
 then:
   - add_constrains:
       - intel-openmp <0.0a0
+---
+# These legacy Windows builds install Library/bin/libiomp5md.dll, colliding
+# with intel-openmp. The replacement can break consumers of Intel's runtime.
+# https://github.com/conda-forge/openmp-feedstock/issues/112
+# openmp 6.0.0 build 1 and later no longer ship this conflicting DLL.
+if:
+  timestamp_lt: 2026-10-26T10:36:58Z
+  name: openmp
+  subdir_in: win-64
+  artifact_in:
+    - openmp-4.0.0-vc14_0.tar.bz2
+    - openmp-5.0.0-vc14_0.tar.bz2
+    - openmp-5.0.0-vc14_1.tar.bz2
+    - openmp-6.0.0-vc14_0.tar.bz2
+then:
+  - add_constrains:
+      - intel-openmp <0.0a0
